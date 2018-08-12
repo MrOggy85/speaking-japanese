@@ -2,15 +2,18 @@
   "name": "speaking-japanese",
   "version": "0.1.0",
   "description": "Learning Japanese by different speaking challanges",
-  "main": "app/main.js",
   "private": true,
   "author": "Oskar Lindgren <lindgren.oskar@gmail.com>",
   "dependencies": {
     "dotenv": "^6.0.0",
     "express": "^4.16.3",
-    "vue": "^2.5.16"
+    "vue": "^2.5.16",
+    "serve": "latest"
   },
   "devDependencies": {
+    "@vue/cli-plugin-babel": "^3.0.0",
+    "@vue/cli-plugin-eslint": "^3.0.0",
+    "@vue/cli-service": "^3.0.0",
     "babel-core": "^6.26.3",
     "babel-eslint": "^8.2.6",
     "babel-loader": "^7.1.5",
@@ -23,6 +26,7 @@
     "eslint-config-airbnb-base": "^13.0.0",
     "eslint-plugin-babel": "^5.1.0",
     "eslint-plugin-import": "^2.13.0",
+    "eslint-plugin-vue": "^4.7.1",
     "file-loader": "^1.1.11",
     "vue-loader": "^15.2.4",
     "vue-style-loader": "^4.1.0",
@@ -32,9 +36,10 @@
     "webpack-dev-server": "^3.1.4"
   },
   "scripts": {
-    "dev": "webpack-dev-server --inline --hot --debug",
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "webpack --config webpack.config.js"
+    "start": "serve ./dist --single",
+    "build": "vue-cli-service build app/main.js",
+    "serve": "vue-cli-service serve app/main.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
   "license": "MIT"

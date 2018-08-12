@@ -1,7 +1,8 @@
 module.exports = {
   root: true,
-  parser: 'babel-eslint',
+  parser: 'vue-eslint-parser',
   parserOptions: {
+    parser: 'babel-eslint',
     ecmaVersion: 6,
     sourceType: 'module',
     ecmaFeatures: {
@@ -19,6 +20,7 @@ module.exports = {
   },
   extends: [
     'eslint:recommended',
+    'plugin:vue/essential',
     'airbnb-base',
   ],
   rules: {
