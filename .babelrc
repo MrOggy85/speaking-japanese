@@ -1,0 +1,16 @@
+{
+  "presets": [
+    [
+      "env", {
+        "modules": false
+      }
+    ]
+  ],
+  "plugins": [
+    ["module-resolver", {
+        "root": ["./app"],
+      }
+    ],
+    "transform-class-properties",
+  ],
+}
