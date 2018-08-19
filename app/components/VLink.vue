@@ -1,6 +1,6 @@
 <template>
   <a
-    v-bind:href="href"
+    v-bind:href="fullHref"
     v-bind:class="{ active: isActive }"
     v-on:click="go"
   >
@@ -9,6 +9,7 @@
 </template>
 
 <script>
+  import { baseUrl } from '../../vue.config';
   import routes from '../routes'
   export default {
     props: {
@@ -20,19 +21,22 @@
     computed: {
       isActive () {
         return this.href === this.$root.currentRoute
-      }
+      },
+      fullHref() {
+        return `${baseUrl}${this.href}`;
+      },
     },
     methods: {
       go (event) {
         event.preventDefault()
-        this.$root.currentRoute = this.href
+        this.$root.currentRoute = `${baseUrl}${this.href}`;
         window.history.pushState(
           null,
-          routes[this.href],
-          this.href
-        )
-      }
-    }
+          routes[`${baseUrl}${this.href}`],
+          `${baseUrl}${this.href}`,
+        );
+      },
+    },
   }
 </script>
 
