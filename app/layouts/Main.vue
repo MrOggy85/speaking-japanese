@@ -3,9 +3,7 @@
     <div class="nav-bar">
       <div class="nav-bar-item">
         <v-link href="/">Home</v-link>
-      </div>
-      <div class="nav-bar-item">
-        <v-link href="/about">About</v-link>
+
       </div>
     </div>
 
