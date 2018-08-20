@@ -14,6 +14,7 @@
       :isSpeaking='isSpeaking'
       :isCorrect='isCorrect'
       :showHintButton='showHintButton'
+      :onActionButtonClick='onActionButtonClick'
     />
   </main-layout>
 </template>
@@ -32,6 +33,19 @@
   const feeback = {
     CORRECT: 'すごい！',
     INCORRECT: '間違えていました',
+  }
+
+  function performAction() {
+    if (this.isCorrect !== true &&
+        this.question) {
+      this.userInput = '';
+      this.actionText = '';
+      this.isCorrect = null;
+      this.recordingText = 'listening...';
+      this.speechRecognition.startRecognition();
+    } else {
+      this.nextQuestion();
+    }
   }
 
   const app = {
@@ -61,7 +75,7 @@
         showHintButton: false,
         isCorrect: null,
 
-        actionText: 'Press ENTER to Start',
+        actionText: 'Start',
         failedAttempts: 0,
 
         // SpeechInput
@@ -94,7 +108,7 @@
         this.showHintButton = false;
         this.failedAttempts = 0;
         this.userInput = '';
-        this.actionText = 'Press ENTER and start speaking';
+        this.actionText = 'SPEAK';
       },
 
       checkAnswer: function() {
@@ -115,15 +129,19 @@
               self.nextQuestion();
             }, 3000)
           } else {
-            this.actionText = 'Press ENTER for next Question';
+            this.actionText = 'NEXT QUESTION';
           }
         } else {
-          this.actionText = 'Press ENTER to try again';
+          this.actionText = 'TRY AGAIN';
           this.failedAttempts++;
           if (this.failedAttempts > 1) {
             this.showHintButton = true;
           }
         }
+      },
+
+      onActionButtonClick: function() {
+        performAction.call(this);
       },
 
       onKeyPress: function(e) {
@@ -133,16 +151,7 @@
 
         var key = e.which || e.keyCode;
         if (key === keys.ENTER) {
-          if (this.isCorrect !== true &&
-              this.question) {
-            this.userInput = '';
-            this.actionText = '';
-            this.isCorrect = null;
-            this.recordingText = 'listening...';
-            this.speechRecognition.startRecognition();
-          } else {
-            this.nextQuestion();
-          }
+          performAction.call(this);
         }
       },
     },
@@ -159,7 +168,7 @@
         onSpeechEndCallback: () => {
           this.isSpeaking = false;
           if (!this.userInput) {
-            this.actionText = 'Press ENTER to start speaking';
+            this.actionText = 'SPEAK';
             this.recordingText = 'You didn\'t say anything!';
           } else {
             this.recordingText = '';
@@ -176,7 +185,7 @@
         },
         onErrorCallback: (errorText) => {
           if (errorText === 'no-speech') {
-            this.actionText = 'Press ENTER to start speaking';
+            this.actionText = 'SPEAK';
             this.recordingText = 'No speech input detected';
           } else {
             this.recordingText = errorText;

@@ -6,7 +6,7 @@
       flexDirection: 'column',
       justifyContent: 'center',
       width: '80%',
-      padding: '50px',
+      padding: '0 50px',
     }"
   >
     <div
@@ -53,17 +53,21 @@
     >
       Show Hint (H)
     </button>
-    <h3
+    <button
+      @click='onActionButtonClick'
+      class="action-button"
       :style="{
-        textAlign: 'center',
+        opacity: actionText ? 1 : 0,
       }"
-    >{{ actionText }}</h3>
+    >
+      {{ actionText }}
+    </button>
     <h4
       :style="{
         textAlign: 'center',
       }"
     >
-      {{ recordingText }}
+      {{ recordingText ? recordingText : '&nbsp;' }}
     </h4>
     <h3
       :style="{
@@ -117,12 +121,15 @@
       },
       isCorrect: {
         type:Boolean,
-      }
+      },
+      onActionButtonClick: {
+        type:Function,
+        required: true
+      },
     },
     data: function() {
       return {
         isHintShowing: false,
-        // failedAttempts: 0,
       };
     },
     computed: {
@@ -159,5 +166,27 @@
 <style scoped>
   .active {
     color: cornflowerblue;
+  }
+
+  .action-button {
+    color: white;
+    border: transparent;
+    background-color: rgb(0, 120, 231);
+    text-decoration: none;
+    border-radius: 2px;
+
+    text-align: center;
+    height: 50px;
+    font-size: 17px;
+    cursor: pointer;
+  }
+  .action-button:hover {
+    background-color: rgba(0, 120, 231, 0.9);
+  }
+  .action-button:active {
+    box-shadow: 0 0 0 1px rgba(0,0,0,.15) inset, 0 0 6px rgba(0,0,0,.2) inset;
+  }
+  .action-button:focus {
+    outline: 0;
   }
 </style>
