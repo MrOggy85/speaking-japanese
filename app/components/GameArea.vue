@@ -46,7 +46,10 @@
     </p>
     <button
       @click='showHint'
-      v-if='showHintButton'
+      :style="{
+        opacity: showHintButton ? 1 : 0,
+        marginBottom: '10px',
+      }"
     >
       Show Hint (H)
     </button>
