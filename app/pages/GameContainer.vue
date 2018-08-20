@@ -6,6 +6,8 @@
       :question="question"
       :answer='answers[0]'
       :hint='hint'
+      :isHintVisible='isHintVisible'
+      :isHintButtonVisible='isHintButtonVisible'
 
       :userInput='userInput'
       :actionText='actionText'
@@ -13,8 +15,10 @@
 
       :isSpeaking='isSpeaking'
       :isCorrect='isCorrect'
-      :showHintButton='showHintButton'
+
+
       :onActionButtonClick='onActionButtonClick'
+      :onHintButtonClick='toggleHint'
     />
   </main-layout>
 </template>
@@ -72,7 +76,8 @@
         question: '',
         answers: [''],
         hint: '',
-        showHintButton: false,
+        isHintButtonVisible: false,
+        isHintVisible: false,
         isCorrect: null,
 
         actionText: 'Start',
@@ -105,7 +110,8 @@
 
         // Reset values
         this.isCorrect = null;
-        this.showHintButton = false;
+        this.isHintButtonVisible = false;
+        this.isHintVisible = false;
         this.failedAttempts = 0;
         this.userInput = '';
         this.actionText = 'SPEAK';
@@ -135,7 +141,7 @@
           this.actionText = 'TRY AGAIN';
           this.failedAttempts++;
           if (this.failedAttempts > 1) {
-            this.showHintButton = true;
+            this.isHintButtonVisible = true;
           }
         }
       },
@@ -144,14 +150,21 @@
         performAction.call(this);
       },
 
+      toggleHint: function() {
+        this.isHintVisible = !this.isHintVisible;
+      },
+
       onKeyPress: function(e) {
         const keys = {
           ENTER: 13,
+          H: 104,
         };
 
         var key = e.which || e.keyCode;
         if (key === keys.ENTER) {
           performAction.call(this);
+        } else if (key === keys.H) {
+          this.toggleHint();
         }
       },
     },

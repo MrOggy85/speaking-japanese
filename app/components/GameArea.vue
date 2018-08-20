@@ -42,12 +42,12 @@
     >
     </textarea>
     <p>
-        {{ isHintShowing ? hint : '&nbsp;' }}
+        {{ isHintVisible ? hint : '&nbsp;' }}
     </p>
     <button
-      @click='showHint'
+      @click='onHintButtonClick'
       :style="{
-        opacity: showHintButton ? 1 : 0,
+        opacity: isHintButtonVisible ? 1 : 0,
         marginBottom: '10px',
       }"
     >
@@ -111,7 +111,11 @@
         type:String,
         required: true
       },
-      showHintButton: {
+      isHintButtonVisible: {
+        type:Boolean,
+        required: true
+      },
+      isHintVisible: {
         type:Boolean,
         required: true
       },
@@ -126,12 +130,12 @@
         type:Function,
         required: true
       },
+      onHintButtonClick: {
+        type:Function,
+        required: true
+      },
     },
-    data: function() {
-      return {
-        isHintShowing: false,
-      };
-    },
+
     computed: {
       feebackColor: function() {
         return this.isCorrect
@@ -139,21 +143,7 @@
           : '#c62f2f';
       },
     },
-    methods: {
-      onKeyPress: function(e) {
-        const keys = {
-          H: 104,
-        };
 
-        var key = e.which || e.keyCode;
-        if (key === keys.H) {
-          this.showHint();
-        }
-      },
-      showHint: function() {
-        this.isHintShowing = true;
-      },
-    },
     created: function() {
       document.addEventListener('keypress', this.onKeyPress);
     },
