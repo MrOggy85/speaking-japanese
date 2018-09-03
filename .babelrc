@@ -1,16 +1,10 @@
 {
-  "presets": [
-    [
-      "env", {
-        "modules": false
-      }
-    ]
-  ],
+  "presets": ["@babel/preset-env"],
   "plugins": [
-    ["module-resolver", {
-        "root": ["./app"],
-      }
-    ],
-    "transform-class-properties",
-  ],
+    "@babel/plugin-transform-async-to-generator",
+    "@babel/plugin-transform-regenerator",
+    "@babel/plugin-transform-runtime",
+    "@babel/plugin-syntax-object-rest-spread",
+    "@babel/plugin-proposal-class-properties"
+  ]
 }
