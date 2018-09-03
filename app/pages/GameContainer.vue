@@ -58,11 +58,6 @@
       GameArea,
     },
     props: {
-      gameType: {
-        type:String,
-        // required: true,
-        default: 'ADJECTIVES',
-      },
       fastMode: {
         type:Boolean,
         // required: true,
@@ -72,6 +67,7 @@
     data: function() {
       return {
         // Challenge
+        gameType: null,
         gameEngine: null,
         question: '',
         answers: [''],
@@ -169,6 +165,9 @@
       },
     },
     created: function() {
+      const game = new URLSearchParams(window.location.search).get('game');
+      this.gameType = game;
+
       document.addEventListener('keypress', this.onKeyPress);
 
       this.gameEngine = GameEngine;

@@ -3,8 +3,13 @@
     <h1>Japanese Speaking Practice</h1>
 
     <ul>
-      <li>
-        <v-link href="/play">Play</v-link>
+      <li v-for="challenge in challenges">
+        <v-link
+          href="/play"
+          :query="'game=' + challenge.name"
+        >
+          Play
+        </v-link>
       </li>
     </ul>
   </main-layout>
