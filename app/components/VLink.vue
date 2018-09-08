@@ -1,7 +1,6 @@
 <template>
   <a
     :href="fullHref"
-    :class="{ active: isActive }"
     @click="go"
   >
     <slot></slot>
@@ -48,7 +47,15 @@ export default {
 </script>
 
 <style scoped>
-  .active {
-    color: cornflowerblue;
+  a {
+    color: #5B5B5B;
+    text-decoration: none;
+    outline: none;
+  }
+  a:hover {
+    text-decoration: underline;
+  }
+  a:active {
+    color: #7F7F7F;
   }
 </style>
