@@ -3,6 +3,8 @@ import routes from './routes';
 
 import PageNotFound from './pages/404.vue';
 
+console.log('process.env', process.env)
+
 const app = new Vue({
   el: '#app',
   data: {
