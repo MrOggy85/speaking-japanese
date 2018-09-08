@@ -10,7 +10,8 @@
 <script>
 import routes from '../routes';
 
-const { BASE_URL } = process.env;
+import { getBaseUrl } from '../utils/utils';
+const BASE_URL = getBaseUrl();
 
 export default {
   props: {

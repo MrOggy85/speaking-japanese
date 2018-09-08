@@ -15,7 +15,8 @@
 <script>
 import VLink from '../components/VLink.vue';
 
-const { BASE_URL } = process.env;
+import { getBaseUrl } from '../utils/utils';
+const BASE_URL = getBaseUrl();
 
 export default {
   components: {
