@@ -48,6 +48,7 @@ import VLink from '../components/VLink.vue';
 import MainLayout from '../layouts/Main.vue';
 import request from '../utils/request';
 import { capitalize } from '../utils/utils';
+import { apiEndpoint } from '../../vue.config';
 
 export default {
   components: {
@@ -61,7 +62,7 @@ export default {
     };
   },
   async created() {
-    const result = await request.get({ endpoint: 'http://localhost:5000/api/challenges' });
+    const result = await request.get({ endpoint: `http://${apiEndpoint}:8081/api/challenges` });
 
     this.challenges = result;
   },
