@@ -10,7 +10,7 @@ const app = new Vue({
   },
   computed: {
     ViewComponent() {
-      console.log('this.currentRoute', this.currentRoute)
+      console.log('this.currentRoute', this.currentRoute);
       const page = routes[this.currentRoute];
       return page || PageNotFound;
     },
