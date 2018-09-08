@@ -8,8 +8,10 @@
 </template>
 
 <script>
-import { baseUrl } from '../../vue.config';
 import routes from '../routes';
+
+const { BASE_URL } = process.env;
+
 export default {
   props: {
     href: {
@@ -23,7 +25,7 @@ export default {
   },
   computed: {
     fullHref() {
-      return `${baseUrl}${this.href}${this.fullQuery}`;
+      return `${BASE_URL}${this.href}${this.fullQuery}`;
     },
     fullQuery() {
       return this.query ? `?${this.query}` : '';
@@ -32,11 +34,11 @@ export default {
   methods: {
     go(event) {
       event.preventDefault();
-      this.$root.currentRoute = `${baseUrl}${this.href}`;
+      this.$root.currentRoute = `${BASE_URL}${this.href}`;
       window.history.pushState(
         null,
-        routes[`${baseUrl}${this.href}`],
-        `${baseUrl}${this.href}${this.fullQuery}`,
+        routes[`${BASE_URL}${this.href}`],
+        `${BASE_URL}${this.href}${this.fullQuery}`,
       );
     },
   },

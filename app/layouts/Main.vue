@@ -14,7 +14,8 @@
 
 <script>
 import VLink from '../components/VLink.vue';
-import { baseUrl } from '../../vue.config';
+
+const { BASE_URL } = process.env;
 
 export default {
   components: {
@@ -22,7 +23,7 @@ export default {
   },
   computed: {
     logoUrl() {
-      return `${baseUrl}/logo.png`;
+      return `${BASE_URL}/logo.png`;
     },
   },
 };

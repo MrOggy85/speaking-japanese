@@ -1,8 +1,9 @@
 import Home from './pages/Home.vue';
 import GameContainer from './pages/GameContainer.vue';
-import { baseUrl } from '../vue.config';
+
+const { BASE_URL } = process.env;
 
 export default {
-  [`${baseUrl}/`]: Home,
-  [`${baseUrl}/play`]: GameContainer,
+  [`${BASE_URL}/`]: Home,
+  [`${BASE_URL}/play`]: GameContainer,
 };
