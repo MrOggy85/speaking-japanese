@@ -3,14 +3,41 @@
     <ul>
       <li
         v-for="challenge in challenges"
-        v-bind:key="challenge.id"
+        v-bind:key="challenge._id"
       >
-        <v-link
-          href="/play"
-          :query="'game=' + challenge.name"
+        <div
+          @click="toggleItem(challenge._id)"
+          :class="{
+            active: isActive(challenge._id),
+            header: true,
+          }"
         >
           {{capitalized(challenge.name)}}
-        </v-link>
+        </div>
+        <div
+          v-if="activeItem === challenge._id"
+          class="content"
+        >
+          <p class="description">
+              {{challenge.description}}
+          </p>
+        <div class="buttons">
+          <v-link
+            href="/study"
+            :query="'game=' + challenge.name"
+          >
+            STUDY
+          </v-link>
+          <v-link
+            href="/play"
+            :query="'game=' + challenge.name"
+          >
+            PLAY
+          </v-link>
+        </div>
+
+        </div>
+
       </li>
     </ul>
   </main-layout>
@@ -30,17 +57,27 @@ export default {
   data: () => {
     return {
       challenges: [],
+      activeItem: '',
     };
   },
   async created() {
-    console.log('created');
     const result = await request.get({ endpoint: 'http://localhost:5000/api/challenges' });
-    console.log('result', result);
+
     this.challenges = result;
   },
   methods: {
     capitalized(text) {
       return capitalize(text);
+    },
+    toggleItem(id) {
+      if (this.activeItem === id) {
+        this.activeItem = '';
+        return;
+      }
+      this.activeItem = id;
+    },
+    isActive(id) {
+      return this.activeItem === id;
     },
   },
 };
@@ -52,5 +89,38 @@ export default {
     list-style: none;
     padding: 0;
     font-size: 40px;
+    text-align: center;
+    width: 50%;
+  }
+  li {
+    margin-bottom: 10px;
+  }
+
+  .header {
+    color: #3B3B3B;
+    cursor: pointer;
+  }
+  .header:hover {
+    text-decoration: underline;
+  }
+  .header.active {
+    font-weight: bold;
+  }
+
+  .content {
+    font-size: 20px;
+  }
+  .description {
+    white-space: pre-line;
+    margin-top: 0;
+    margin-bottom: 20px;
+  }
+
+  .buttons {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+
+    font-size: 35px;
   }
 </style>

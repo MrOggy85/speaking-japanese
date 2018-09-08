@@ -22,9 +22,6 @@ export default {
     },
   },
   computed: {
-    isActive() {
-      return this.href === this.$root.currentRoute;
-    },
     fullHref() {
       return `${baseUrl}${this.href}${this.fullQuery}`;
     },
