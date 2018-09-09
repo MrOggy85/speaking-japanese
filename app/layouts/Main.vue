@@ -1,10 +1,16 @@
 <template>
   <div class="main-layout-container">
     <div class="nav-bar">
-      <div class="nav-bar-item">
+      <div class="nav-bar-item desktop">
         <v-link href="/">MENU</v-link>
         <h3>Challenges</h3>
         <img class="logo" width="60" v-bind:src="logoUrl" />
+      </div>
+      <div class="nav-bar-item mobile">
+        <v-link href="/">
+          <img class="logo" width="60" v-bind:src="logoUrl" />
+        </v-link>
+        <h3>Challenges</h3>
       </div>
     </div>
 
@@ -63,4 +69,29 @@ export default {
   h3 {
     color: #5B5B5B;
   }
+
+  .nav-bar-item.desktop {
+    display: none;
+  }
+
+  .nav-bar-item.mobile {
+    justify-content: center;
+  }
+  .nav-bar-item.mobile h3 {
+    max-width: 60%;
+  }
+  .nav-bar-item.mobile a {
+    position: absolute;
+    left: 20px;
+  }
+
+  @media (min-width: 420px) {
+    .nav-bar-item.mobile {
+      display: none;
+    }
+    .nav-bar-item.desktop {
+      display: inherit;
+    }
+  }
+
 </style>
