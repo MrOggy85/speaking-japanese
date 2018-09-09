@@ -93,7 +93,7 @@ export default {
     padding: 0;
     font-size: 40px;
     text-align: center;
-    width: 50%;
+    width: 85%;
   }
   li {
     margin-bottom: 10px;
@@ -125,5 +125,11 @@ export default {
     align-items: center;
 
     font-size: 35px;
+  }
+
+  @media (min-width: 420px) {
+    ul {
+      width: 40%;
+    }
   }
 </style>
