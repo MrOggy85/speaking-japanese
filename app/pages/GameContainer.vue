@@ -95,10 +95,10 @@
       },
     },
     methods: {
-      nextQuestion: function() {
+      nextQuestion: async function() {
         console.log('nextQuestion');
         // Setup Challenge object
-        const challenge = this.gameEngine.getNextQuestion(this.gameType);
+        const challenge = await this.gameEngine.getNextQuestion(this.gameType);
 
         this.question = challenge.question;
         this.answers = challenge.answers;
