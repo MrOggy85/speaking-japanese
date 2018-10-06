@@ -3,14 +3,14 @@
     <div class="nav-bar">
       <div class="nav-bar-item desktop">
         <v-link href="/">MENU</v-link>
-        <h3>Challenges</h3>
+        <h3 :class='{ hasTitle: hasTitle }'>{{ getTitle }}</h3>
         <img class="logo" width="60" v-bind:src="logoUrl" />
       </div>
       <div class="nav-bar-item mobile">
         <v-link href="/">
           <img class="logo" width="60" v-bind:src="logoUrl" />
         </v-link>
-        <h3>Challenges</h3>
+        <h3>{{ getTitle }}</h3>
       </div>
     </div>
 
@@ -21,16 +21,27 @@
 <script>
 import VLink from '../components/VLink.vue';
 
-import { getBaseUrl } from '../utils/utils';
+import { getBaseUrl, capitalize } from '../utils/utils';
 const BASE_URL = getBaseUrl();
 
 export default {
   components: {
     VLink,
   },
+  props: {
+    title: {
+      type: String,
+    },
+  },
   computed: {
     logoUrl() {
       return `${BASE_URL}/logo.png`;
+    },
+    getTitle() {
+      return this.title ? capitalize(this.title) : 'Challenges';
+    },
+    hasTitle() {
+      return this.title;
     },
   },
 };
@@ -92,6 +103,10 @@ export default {
     .nav-bar-item.desktop {
       display: inherit;
     }
+    .nav-bar-item.desktop h3.hasTitle {
+      width: 100%;
+      text-align: right;
+      padding-right: 1%;
+    }
   }
-
 </style>

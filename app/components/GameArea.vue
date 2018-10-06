@@ -2,7 +2,7 @@
   <div
     :style="{
       display: 'flex',
-      background: 'white',
+      /* background: 'white', */
       flexDirection: 'column',
       justifyContent: 'center',
       width: '80%',
@@ -28,31 +28,61 @@
       </div>
     </div>
 
-    <textarea
-      type="text"
-      readonly
-      rows="3"
+    <div
       :style="{
-        fontSize: '20px',
-        color: isSpeaking ? 'gray' : 'black',
-        borderWidth: '2px',
-        padding: '10px',
-      }"
-      v-model='userInput'
-    >
-    </textarea>
-    <p>
-        {{ isHintVisible ? hint : '&nbsp;' }}
-    </p>
-    <button
-      @click='onHintButtonClick'
-      :style="{
-        opacity: isHintButtonVisible ? 1 : 0,
-        marginBottom: '10px',
+        display: 'flex',
+        minHeight: '150px',
+        marginBottom: '20px',
+        justifyContent: 'center',
+        alignItems: 'center',
+        textAlign: 'center',
       }"
     >
-      Show Hint (H)
-    </button>
+      <div
+        :style="{
+          color: isSpeaking ? 'gray' : 'black',
+        }"
+        :class='{
+          userInput: true,
+          speaking: isSpeaking,
+          correct: isCorrect,
+          wrong: isCorrect === false,
+        }'
+      >
+        {{ userInput }}
+      </div>
+    </div>
+
+    <div
+      :style="{
+        display: 'flex',
+        marginBottom: '20px',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        textAlign: 'center',
+      }"
+    >
+      <speakingSvg
+        :style="{
+            width: '80px',
+        }"
+      />
+      <p>
+          {{ isHintVisible ? hint : '&nbsp;' }}
+      </p>
+      <button
+        @click='onHintButtonClick'
+        :class='{
+          hintButton: true,
+          visible: isHintButtonVisible,
+
+        }'
+
+      >
+        ?
+      </button>
+    </div>
+
     <button
       @click='onActionButtonClick'
       class="action-button"
@@ -69,14 +99,15 @@
     >
       {{ recordingText ? recordingText : '&nbsp;' }}
     </h4>
-    <h3
+
+    <!-- <h3
       :style="{
         color: feebackColor,
         textAlign: 'center',
       }"
     >
       {{ isCorrect }}
-    </h3>
+    </h3> -->
   </div>
 </template>
 
@@ -85,72 +116,106 @@
 </style>
 
 <script>
-  export default {
-    props: {
-      question: {
-        type:String,
-        required: true
-      },
-      answer: {
-        type:String,
-        required: true
-      },
-      userInput: {
-        type:String,
-        required: true
-      },
-      recordingText: {
-        type:String,
-        required: true
-      },
-      actionText: {
-        type:String,
-        required: true
-      },
-      hint: {
-        type:String,
-        required: true
-      },
-      isHintButtonVisible: {
-        type:Boolean,
-        required: true
-      },
-      isHintVisible: {
-        type:Boolean,
-        required: true
-      },
-      isSpeaking: {
-        type:Boolean,
-        required: true
-      },
-      isCorrect: {
-        type:Boolean,
-      },
-      onActionButtonClick: {
-        type:Function,
-        required: true
-      },
-      onHintButtonClick: {
-        type:Function,
-        required: true
-      },
-    },
+import speakingSvg from '../../public/speaking.svg';
 
-    computed: {
-      feebackColor: function() {
-        return this.isCorrect
-          ? '#2fc661'
-          : '#c62f2f';
-      },
+export default {
+  name: 'GameArea',
+  components: {
+    speakingSvg,
+  },
+  props: {
+    question: {
+      type: String,
+      required: true,
     },
+    answer: {
+      type: String,
+      required: true,
+    },
+    userInput: {
+      type: String,
+      required: true,
+    },
+    recordingText: {
+      type: String,
+      required: true,
+    },
+    actionText: {
+      type: String,
+      required: true,
+    },
+    hint: {
+      type: String,
+      required: true,
+    },
+    isHintButtonVisible: {
+      type: Boolean,
+      required: true,
+    },
+    isHintVisible: {
+      type: Boolean,
+      required: true,
+    },
+    isSpeaking: {
+      type: Boolean,
+      required: true,
+    },
+    isCorrect: {
+      type: Boolean,
+    },
+    onActionButtonClick: {
+      type: Function,
+      required: true,
+    },
+    onHintButtonClick: {
+      type: Function,
+      required: true,
+    },
+  },
 
-    created: function() {
-      document.addEventListener('keypress', this.onKeyPress);
+  computed: {
+    feebackColor: function() {
+      return this.isCorrect
+        ? '#2fc661'
+        : '#c62f2f';
     },
-    destroyed: function() {
-      document.removeEventListener('keypress', this.onKeyPress);
-    },
-  }
+  },
+
+  data() {
+    return {
+      speakingAnimation: null,
+    };
+  },
+
+  created() {
+    document.addEventListener('keypress', this.onKeyPress);
+
+    window.spirit.loadAnimation({
+      loop: true,
+      yoyo: true,
+      delay: 0,
+      autoPlay: false,
+      path: 'speaking.json',
+    }).then(timeline => {
+      this.speakingAnimation = timeline;
+    });
+
+    this.$watch('isSpeaking', (newValue, oldValue) => {
+      if (newValue === oldValue) {
+        return;
+      }
+      if (newValue) {
+        this.speakingAnimation.play();
+      } else {
+        this.speakingAnimation.stop();
+        this.speakingAnimation.progress(0);
+      }
+    });
+  },
+  destroyed() {
+    document.removeEventListener('keypress', this.onKeyPress);
+  },
+};
 </script>
 
 <style scoped>
@@ -179,4 +244,89 @@
   .action-button:focus {
     outline: 0;
   }
+
+  .hintButton {
+    background: none;
+
+    padding: 10px 20px;
+
+    border-width: 4px;
+    border-style: solid;
+    border-radius: 8px;
+    border-color: rgba(0,0,0,.15);
+    color: rgba(0,0,0,.15);
+
+    font-size: 28px;
+    font-weight: bold;
+  }
+  .hintButton.visible {
+    border-color: black;
+    color: black;
+  }
+  .hintButton:active {
+    background-color: gray;
+  }
+  .hintButton:focus {
+    outline: none;
+  }
+
+  .userInput {
+    font-size: 38px;
+  }
+  .userInput.correct {
+    animation: bounce 0.4s ease-out;
+  }
+  .userInput.wrong {
+    animation: shake 0.5s cubic-bezier(.36,.07,.19,.97) both;
+  }
+  .userInput.correct::after {
+    content: "\2713";
+    top: 110%;
+    left: 50%;
+    position: absolute;
+    margin-left: -15px;
+    color: rgb(47, 198, 97);
+  }
+  .userInput.wrong::after {
+    content: "\2717";
+    top: 110%;
+    left: 50%;
+    position: absolute;
+    margin-left: -15px;
+    color: #c62f2f;
+  }
+
+  @keyframes bounce {
+    0% {
+      transform: scale(1);
+    }
+    50% {
+      transform: scale(1.2);
+    }
+    90% {
+      transform: scale(0.8);
+    }
+    100% {
+      transform: scale(1);
+    }
+  }
+
+  @keyframes shake {
+  10%, 90% {
+    transform: translate3d(-2px, 0, 0);
+  }
+
+  20%, 80% {
+    transform: translate3d(4px, 0, 0);
+  }
+
+  30%, 50%, 70% {
+    transform: translate3d(-8px, 0, 0);
+  }
+
+  40%, 60% {
+    transform: translate3d(8px, 0, 0);
+  }
+}
+
 </style>

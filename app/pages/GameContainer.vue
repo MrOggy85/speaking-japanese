@@ -1,7 +1,9 @@
 
 <template>
-  <main-layout>
-    <h2>You are playing: {{ gameType }}</h2>
+  <main-layout
+    :title="gameType"
+  >
+    <!-- <h2>You are playing: {{ gameType }}</h2> -->
     <game-area
       :question="question"
       :answer='answers[0]'
