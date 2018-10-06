@@ -271,6 +271,7 @@ export default {
   }
 
   .userInput {
+    position: relative;
     font-size: 38px;
   }
   .userInput.correct {
