@@ -27,7 +27,8 @@ module.exports = {
     'max-len': 0,
     'prefer-destructuring': 0,
     'import/newline-after-import': 0,
-    'arrow-body-style': ['error', 'always'],
+    'arrow-body-style': 0,
     'object-curly-newline': 0,
+    'arrow-parens': 0,
   }
 }
