@@ -7,7 +7,7 @@
   "dependencies": {
     "dotenv": "^6.0.0",
     "express": "^4.16.3",
-    "serve": "latest",
+    "serve": "10.0.2",
     "vue": "^2.5.17"
   },
   "devDependencies": {
