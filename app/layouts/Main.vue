@@ -2,13 +2,20 @@
   <div class="main-layout-container">
     <div class="nav-bar">
       <div class="nav-bar-item desktop">
-        <v-link href="/">MENU</v-link>
-        <h3 :class='{ hasTitle: hasTitle }'>{{ getTitle }}</h3>
+        <div class="menu-choices">
+          <v-link href="/">HOME</v-link>
+          <v-link href="/settings">SETTINGS</v-link>
+        </div>
+        
+        <h3>{{ getTitle }}</h3>
         <img class="logo" width="60" v-bind:src="logoUrl" />
       </div>
       <div class="nav-bar-item mobile">
-        <v-link href="/">
+        <v-link href="/" class="home">
           <img class="logo" width="60" v-bind:src="logoUrl" />
+        </v-link>
+        <v-link href="/settings" class="settings">
+          <p>&#9881;</p>
         </v-link>
         <h3>{{ getTitle }}</h3>
       </div>
@@ -74,6 +81,14 @@ export default {
     padding: 0 20px;
   }
 
+  .menu-choices {
+    display: flex;
+    flex-direction: column;
+  }
+  .menu-choices a {
+    margin-bottom: 5px;
+  }
+
   .logo {
     opacity: 0.7;
   }
@@ -91,9 +106,18 @@ export default {
   .nav-bar-item.mobile h3 {
     max-width: 60%;
   }
-  .nav-bar-item.mobile a {
+  .nav-bar-item.mobile .home {
     position: absolute;
     left: 20px;
+  }
+  .nav-bar-item.mobile .settings {
+    position: absolute;
+    right: 0;
+    width: 70px;
+    height: 80px;
+    font-size: 37px;
+    text-align: center;
+    line-height: 0;
   }
 
   @media (min-width: 420px) {
@@ -103,7 +127,7 @@ export default {
     .nav-bar-item.desktop {
       display: inherit;
     }
-    .nav-bar-item.desktop h3.hasTitle {
+    .nav-bar-item.desktop h3 {
       width: 100%;
       text-align: right;
       padding-right: 1%;

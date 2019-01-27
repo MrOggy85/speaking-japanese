@@ -37,6 +37,8 @@ import GameEngine from '../utils/gameEngine';
 import SpeechRecognitionAdapter from '../utils/SpeechRecognitionAdapter';
 import SpeechSynthesisAdapter from '../utils/SpeechSynthesisAdapter';
 
+import { getSettings } from '../utils/utils';
+
 const feeback = {
   CORRECT: 'すごい！',
   INCORRECT: '間違えていました',
@@ -136,7 +138,10 @@ const app = {
             self.nextQuestion();
           }, 3000);
         } else {
-          this.speechSynthesis.speak(this.userInput);
+          if (getSettings().speech !== false) {
+            this.speechSynthesis.speak(this.userInput);
+          }
+
           this.actionText = 'NEXT QUESTION';
         }
       } else {

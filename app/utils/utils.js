@@ -14,3 +14,16 @@ export function getBaseUrl() {
   }
   return BASE_URL;
 }
+
+export function getSettings() {
+  const settingsString = localStorage.getItem('settings');
+  if (!settingsString) {
+    return {};
+  }
+  return JSON.parse(settingsString);
+}
+
+export function saveSettings(settings) {
+  const settingsString = JSON.stringify(settings);
+  localStorage.setItem('settings', settingsString);
+}
