@@ -35,6 +35,7 @@
 
   import GameEngine from '../utils/gameEngine';
   import SpeechRecognitionAdapter from '../utils/SpeechRecognitionAdapter';
+  import SpeechSynthesisAdapter from '../utils/SpeechSynthesisAdapter';
 
   const feeback = {
     CORRECT: 'すごい！',
@@ -83,6 +84,7 @@
 
         // SpeechInput
         speechRecognition: null,
+        speechSynthesis: null,
         userInput: '',
         feedbackText: '',
         recordingText: '',
@@ -133,6 +135,7 @@
               self.nextQuestion();
             }, 3000)
           } else {
+            this.speechSynthesis.speak(this.userInput);
             this.actionText = 'NEXT QUESTION';
           }
         } else {
@@ -206,6 +209,8 @@
           }
         },
       });
+
+      this.speechSynthesis = new SpeechSynthesisAdapter();
     },
     destroyed: function() {
       document.removeEventListener('keypress', this.onKeyPress);
