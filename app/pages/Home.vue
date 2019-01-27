@@ -5,7 +5,8 @@
         v-for="challenge in challenges"
         v-bind:key="challenge._id"
       >
-        <div
+        <a
+          href="# "
           @click="toggleItem(challenge._id)"
           :class="{
             active: isActive(challenge._id),
@@ -13,7 +14,7 @@
           }"
         >
           {{capitalized(challenge.name)}}
-        </div>
+        </a>
         <div
           v-if="activeItem === challenge._id"
           class="content"
@@ -102,6 +103,7 @@ export default {
   .header {
     color: #3B3B3B;
     cursor: pointer;
+    text-decoration: none;
   }
   .header:hover {
     text-decoration: underline;

@@ -2,7 +2,6 @@
   <div
     :style="{
       display: 'flex',
-      /* background: 'white', */
       flexDirection: 'column',
       justifyContent: 'center',
       width: '80%',
@@ -75,7 +74,6 @@
         :class='{
           hintButton: true,
           visible: isHintButtonVisible,
-
         }'
 
       >
@@ -110,10 +108,6 @@
     </h3> -->
   </div>
 </template>
-
-<style scoped>
-
-</style>
 
 <script>
 import speakingSvg from '../../public/speaking.svg';
@@ -188,8 +182,6 @@ export default {
   },
 
   created() {
-    document.addEventListener('keypress', this.onKeyPress);
-
     window.spirit.loadAnimation({
       loop: true,
       yoyo: true,
@@ -212,9 +204,6 @@ export default {
       }
     });
   },
-  destroyed() {
-    document.removeEventListener('keypress', this.onKeyPress);
-  },
 };
 </script>
 
@@ -226,7 +215,7 @@ export default {
   .action-button {
     color: white;
     border: transparent;
-    background-color: rgb(0, 120, 231);
+    background-color: #0078e7;
     text-decoration: none;
     border-radius: 2px;
 
@@ -236,7 +225,7 @@ export default {
     cursor: pointer;
   }
   .action-button:hover {
-    background-color: rgba(0, 120, 231, 0.9);
+    background-color: #0078e7e6;
   }
   .action-button:active {
     box-shadow: 0 0 0 1px rgba(0,0,0,.15) inset, 0 0 6px rgba(0,0,0,.2) inset;
@@ -286,7 +275,7 @@ export default {
     left: 50%;
     position: absolute;
     margin-left: -15px;
-    color: rgb(47, 198, 97);
+    color: #2fc661;
   }
   .userInput.wrong::after {
     content: "\2717";

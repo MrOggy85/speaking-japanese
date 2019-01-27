@@ -40,11 +40,12 @@ import SpeechSynthesisAdapter from '../utils/SpeechSynthesisAdapter';
 const feeback = {
   CORRECT: 'すごい！',
   INCORRECT: '間違えていました',
-}
+};
 
 function performAction() {
-  if (this.isCorrect !== true &&
-      this.question) {
+  if (this.isCorrect !== true
+      && this.question)
+  {
     this.userInput = '';
     this.actionText = '';
     this.isCorrect = null;
