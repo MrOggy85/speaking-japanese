@@ -30,192 +30,191 @@
 </style>
 
 <script>
-  import MainLayout from '../layouts/Main.vue';
-  import GameArea from '../components/GameArea.vue';
+import MainLayout from '../layouts/Main.vue';
+import GameArea from '../components/GameArea.vue';
 
-  import GameEngine from '../utils/gameEngine';
-  import SpeechRecognitionAdapter from '../utils/SpeechRecognitionAdapter';
-  import SpeechSynthesisAdapter from '../utils/SpeechSynthesisAdapter';
+import GameEngine from '../utils/gameEngine';
+import SpeechRecognitionAdapter from '../utils/SpeechRecognitionAdapter';
+import SpeechSynthesisAdapter from '../utils/SpeechSynthesisAdapter';
 
-  const feeback = {
-    CORRECT: 'すごい！',
-    INCORRECT: '間違えていました',
+const feeback = {
+  CORRECT: 'すごい！',
+  INCORRECT: '間違えていました',
+}
+
+function performAction() {
+  if (this.isCorrect !== true &&
+      this.question) {
+    this.userInput = '';
+    this.actionText = '';
+    this.isCorrect = null;
+    this.recordingText = 'listening...';
+    this.speechRecognition.startRecognition();
+  } else {
+    this.nextQuestion();
   }
+}
 
-  function performAction() {
-    if (this.isCorrect !== true &&
-        this.question) {
-      this.userInput = '';
-      this.actionText = '';
+const app = {
+  components: {
+    MainLayout,
+    GameArea,
+  },
+  props: {
+    fastMode: {
+      type: Boolean,
+      // required: true,
+      default: false,
+    },
+  },
+  data() {
+    return {
+      // Challenge
+      gameType: null,
+      gameEngine: null,
+      question: '',
+      answers: [''],
+      hint: '',
+      isHintButtonVisible: false,
+      isHintVisible: false,
+      isCorrect: null,
+
+      actionText: 'Start',
+      failedAttempts: 0,
+
+      // SpeechInput
+      speechRecognition: null,
+      speechSynthesis: null,
+      userInput: '',
+      feedbackText: '',
+      recordingText: '',
+      isSpeaking: false,
+    };
+  },
+  computed: {
+    feebackColor() {
+      return this.feedback === feeback.CORRECT
+        ? '#2fc661'
+        : '#c62f2f';
+    },
+  },
+  methods: {
+    async nextQuestion() {
+      console.log('nextQuestion');
+      // Setup Challenge object
+      const challenge = await this.gameEngine.getNextQuestion(this.gameType);
+
+      this.question = challenge.question;
+      this.answers = challenge.answers;
+      this.hint = challenge.hint;
+
+      // Reset values
       this.isCorrect = null;
-      this.recordingText = 'listening...';
-      this.speechRecognition.startRecognition();
-    } else {
-      this.nextQuestion();
-    }
-  }
-
-  const app = {
-    components: {
-      MainLayout,
-      GameArea,
+      this.isHintButtonVisible = false;
+      this.isHintVisible = false;
+      this.failedAttempts = 0;
+      this.userInput = '';
+      this.actionText = 'SPEAK';
     },
-    props: {
-      fastMode: {
-        type:Boolean,
-        // required: true,
-        default: false,
-      },
-    },
-    data: function() {
-      return {
-        // Challenge
-        gameType: null,
-        gameEngine: null,
-        question: '',
-        answers: [''],
-        hint: '',
-        isHintButtonVisible: false,
-        isHintVisible: false,
-        isCorrect: null,
 
-        actionText: 'Start',
-        failedAttempts: 0,
+    checkAnswer() {
+      console.log('checkAnswer...');
 
-        // SpeechInput
-        speechRecognition: null,
-        speechSynthesis: null,
-        userInput: '',
-        feedbackText: '',
-        recordingText: '',
-        isSpeaking: false,
-      };
-    },
-    computed: {
-      feebackColor: function() {
-        return this.feedback === feeback.CORRECT
-          ? '#2fc661'
-          : '#c62f2f';
-      },
-    },
-    methods: {
-      nextQuestion: async function() {
-        console.log('nextQuestion');
-        // Setup Challenge object
-        const challenge = await this.gameEngine.getNextQuestion(this.gameType);
+      this.isCorrect = this.answers.includes(this.userInput);
 
-        this.question = challenge.question;
-        this.answers = challenge.answers;
-        this.hint = challenge.hint;
-
-        // Reset values
-        this.isCorrect = null;
-        this.isHintButtonVisible = false;
-        this.isHintVisible = false;
-        this.failedAttempts = 0;
-        this.userInput = '';
-        this.actionText = 'SPEAK';
-      },
-
-      checkAnswer: function() {
-        console.log('checkAnswer...');
-
-        this.isCorrect = this.answers.includes(this.userInput);
-
-        if (this.isCorrect) {
-          if (this.fastMode) {
-            let timeLeft = 3;
-            const self = this;
-            const intervalId = setInterval(function() {
-              timeLeft -= 0.1;
-              self.actionText = `Next Question in ${timeLeft.toFixed(2)} seconds`;
-            }, 100)
-            setTimeout(function() {
-              clearInterval(intervalId);
-              self.nextQuestion();
-            }, 3000)
-          } else {
-            this.speechSynthesis.speak(this.userInput);
-            this.actionText = 'NEXT QUESTION';
-          }
+      if (this.isCorrect) {
+        if (this.fastMode) {
+          let timeLeft = 3;
+          const self = this;
+          const intervalId = setInterval(() => {
+            timeLeft -= 0.1;
+            self.actionText = `Next Question in ${timeLeft.toFixed(2)} seconds`;
+          }, 100);
+          setTimeout(() => {
+            clearInterval(intervalId);
+            self.nextQuestion();
+          }, 3000);
         } else {
-          this.actionText = 'TRY AGAIN';
-          this.failedAttempts++;
-          if (this.failedAttempts > 1) {
-            this.isHintButtonVisible = true;
-          }
+          this.speechSynthesis.speak(this.userInput);
+          this.actionText = 'NEXT QUESTION';
         }
-      },
+      } else {
+        this.actionText = 'TRY AGAIN';
+        this.failedAttempts += 1;
+        if (this.failedAttempts > 1) {
+          this.isHintButtonVisible = true;
+        }
+      }
+    },
 
-      onActionButtonClick: function() {
+    onActionButtonClick() {
+      performAction.call(this);
+    },
+
+    toggleHint() {
+      this.isHintVisible = !this.isHintVisible;
+    },
+
+    onKeyPress(e) {
+      const keys = {
+        ENTER: 13,
+        H: 104,
+      };
+
+      const key = e.which || e.keyCode;
+      if (key === keys.ENTER) {
         performAction.call(this);
+      } else if (key === keys.H) {
+        this.toggleHint();
+      }
+    },
+  },
+  created() {
+    const game = new URLSearchParams(window.location.search).get('game');
+    this.gameType = game;
+
+    document.addEventListener('keypress', this.onKeyPress);
+
+    this.gameEngine = GameEngine;
+
+    this.speechRecognition = new SpeechRecognitionAdapter({
+      onSpeechStartCallback: () => {
+        this.recordingText = 'detecting...';
+        this.isSpeaking = true;
       },
-
-      toggleHint: function() {
-        this.isHintVisible = !this.isHintVisible;
-      },
-
-      onKeyPress: function(e) {
-        const keys = {
-          ENTER: 13,
-          H: 104,
-        };
-
-        var key = e.which || e.keyCode;
-        if (key === keys.ENTER) {
-          performAction.call(this);
-        } else if (key === keys.H) {
-          this.toggleHint();
+      onSpeechEndCallback: () => {
+        this.isSpeaking = false;
+        if (!this.userInput) {
+          this.actionText = 'SPEAK';
+          this.recordingText = 'You didn\'t say anything!';
+        } else {
+          this.recordingText = '';
         }
       },
-    },
-    created: function() {
-      const game = new URLSearchParams(window.location.search).get('game');
-      this.gameType = game;
+      onResultCallback: (text, isFinal, isSpeaking) => {
+        this.userInput = text;
+        if (isFinal) {
+          this.checkAnswer();
+        } else if (!isSpeaking) {
+          this.checkAnswer();
+        }
+      },
+      onErrorCallback: (errorText) => {
+        if (errorText === 'no-speech') {
+          this.actionText = 'SPEAK';
+          this.recordingText = 'No speech input detected';
+        } else {
+          this.recordingText = errorText;
+        }
+      },
+    });
 
-      document.addEventListener('keypress', this.onKeyPress);
+    this.speechSynthesis = new SpeechSynthesisAdapter();
+  },
+  destroyed() {
+    document.removeEventListener('keypress', this.onKeyPress);
+  },
+};
 
-      this.gameEngine = GameEngine;
-
-      this.speechRecognition = new SpeechRecognitionAdapter({
-        onSpeechStartCallback: () => {
-          this.recordingText = 'detecting...';
-          this.isSpeaking = true;
-        },
-        onSpeechEndCallback: () => {
-          this.isSpeaking = false;
-          if (!this.userInput) {
-            this.actionText = 'SPEAK';
-            this.recordingText = 'You didn\'t say anything!';
-          } else {
-            this.recordingText = '';
-          }
-        },
-        onResultCallback: (text, isFinal, isSpeaking) => {
-          this.userInput = text;
-          if (isFinal) {
-            this.checkAnswer();
-          } else if(!isSpeaking) {
-            this.checkAnswer();
-          }
-
-        },
-        onErrorCallback: (errorText) => {
-          if (errorText === 'no-speech') {
-            this.actionText = 'SPEAK';
-            this.recordingText = 'No speech input detected';
-          } else {
-            this.recordingText = errorText;
-          }
-        },
-      });
-
-      this.speechSynthesis = new SpeechSynthesisAdapter();
-    },
-    destroyed: function() {
-      document.removeEventListener('keypress', this.onKeyPress);
-    },
-  }
-
-  export default app;
+export default app;
 </script>

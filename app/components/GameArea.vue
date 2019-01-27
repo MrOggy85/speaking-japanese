@@ -174,7 +174,7 @@ export default {
   },
 
   computed: {
-    feebackColor: function() {
+    feebackColor() {
       return this.isCorrect
         ? '#2fc661'
         : '#c62f2f';

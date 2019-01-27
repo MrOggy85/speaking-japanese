@@ -1,14 +1,16 @@
-const synth = window.speechSynthesis || window.webkitSpeechSynthesis;
-
 class SpeechSynthesisAdapter {
-    speak(text) {
-        const voices = synth.getVoices();
-        const japaneseVoice = voices.find(voice => voice.lang === 'ja-JP');
+  constructor() {
+    this.synth = window.speechSynthesis || window.webkitSpeechSynthesis;
+  }
 
-        const utterThis = new SpeechSynthesisUtterance(text);
-        utterThis.voice = japaneseVoice;
-        synth.speak(utterThis);
-    }
+  speak(text) {
+    const voices = this.synth.getVoices();
+    const japaneseVoice = voices.find(voice => voice.lang === 'ja-JP');
+
+    const utterThis = new SpeechSynthesisUtterance(text);
+    utterThis.voice = japaneseVoice;
+    this.synth.speak(utterThis);
+  }
 }
 
 export default SpeechSynthesisAdapter;
