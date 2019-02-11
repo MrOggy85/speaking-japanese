@@ -19,8 +19,6 @@ const DEFAULT_TIMEOUT = 30000;
  */
 async function call({ endpoint, options, config }) {
   const timeout = config && config.timeout;
-  console.log(`${options.method} request to: ${endpoint}`);
-
   const promiseWrapper = await new Promise(async (resolve, reject) => {
     const timeoutId = setTimeout(() => {
       return reject(new Error('timeout'));
@@ -33,7 +31,6 @@ async function call({ endpoint, options, config }) {
       const data = await response.json();
       return resolve(data);
     } catch (err) {
-      console.log('fetch error', err);
       return reject(err);
     }
   });

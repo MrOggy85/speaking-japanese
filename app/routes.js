@@ -4,7 +4,6 @@ import Settings from './pages/Settings.vue';
 
 import { getBaseUrl } from './utils/utils';
 const BASE_URL = getBaseUrl();
-console.log('routes', BASE_URL);
 
 export default {
   [`${BASE_URL}/`]: Home,

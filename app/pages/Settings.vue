@@ -47,7 +47,6 @@ export default {
   },
   methods: {
     speechChanged() {
-      console.log('speech changed', this.settings);
       saveSettings(this.settings);
     },
   },

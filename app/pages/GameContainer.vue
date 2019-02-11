@@ -103,7 +103,6 @@ const app = {
   },
   methods: {
     async nextQuestion() {
-      console.log('nextQuestion');
       // Setup Challenge object
       const challenge = await this.gameEngine.getNextQuestion(this.gameType);
 
@@ -121,8 +120,6 @@ const app = {
     },
 
     checkAnswer() {
-      console.log('checkAnswer...');
-
       this.isCorrect = this.answers.includes(this.userInput);
 
       if (this.isCorrect) {

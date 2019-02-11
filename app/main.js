@@ -2,7 +2,6 @@ import Vue from 'vue';
 import routes from './routes';
 
 import PageNotFound from './pages/404.vue';
-import { getBaseUrl } from './utils/utils';
 
 const app = new Vue({
   el: '#app',

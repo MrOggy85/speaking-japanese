@@ -31,7 +31,6 @@ class SpeechRecognitionAdapter {
   }
 
   onSpeechStart = () => {
-    console.log('speechstart');
     this.isSpeaking = true;
     if (this.onSpeechStartCallback) {
       this.onSpeechStartCallback();
@@ -39,7 +38,6 @@ class SpeechRecognitionAdapter {
   }
 
   onSpeechEnd = () => {
-    console.log('speechend');
     this.recognition.stop();
     this.isSpeaking = false;
     if (this.onSpeechEndCallback) {
@@ -53,8 +51,6 @@ class SpeechRecognitionAdapter {
 
     const isFinal = e.results[last].isFinal;
     const confidence = e.results[0][0].confidence;
-    console.log('Recognized:', text, isFinal);
-    console.log('Confidence:', confidence.toFixed(3));
 
     if (this.onResultCallback) {
       this.onResultCallback(text.replace(/ /gi, ''), isFinal, this.isSpeaking, confidence);
@@ -62,8 +58,6 @@ class SpeechRecognitionAdapter {
   }
 
   onError = (e) => {
-    console.log('SpeechRecognition error:', e.error);
-
     if (this.onErrorCallback) {
       let errorMessage = e.error;
       if (e.error === 'network') {
