@@ -113,12 +113,12 @@ export default {
   }
 
   .content {
-    font-size: 20px;
+    font-size: 21px;
   }
   .description {
     white-space: pre-line;
     margin-top: 0;
-    margin-bottom: 20px;
+    margin-bottom: 21px;
   }
 
   .buttons {
