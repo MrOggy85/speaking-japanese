@@ -6,13 +6,12 @@
           <v-link href="/">HOME</v-link>
           <v-link href="/settings">SETTINGS</v-link>
         </div>
-        
         <h3>{{ getTitle }}</h3>
-        <img class="logo" width="60" v-bind:src="logoUrl" />
+        <img class="logo" width="60" src="logo.png" />
       </div>
       <div class="nav-bar-item mobile">
         <v-link href="/" class="home">
-          <img class="logo" width="60" v-bind:src="logoUrl" />
+          <img class="logo" width="60" src="logo.png" />
         </v-link>
         <v-link href="/settings" class="settings">
           <p>&#9881;</p>
@@ -28,8 +27,7 @@
 <script>
 import VLink from '../components/VLink.vue';
 
-import { getBaseUrl, capitalize } from '../utils/utils';
-const BASE_URL = getBaseUrl();
+import { capitalize } from '../utils/utils';
 
 export default {
   components: {
@@ -41,9 +39,6 @@ export default {
     },
   },
   computed: {
-    logoUrl() {
-      return `${BASE_URL}/logo.png`;
-    },
     getTitle() {
       return this.title ? capitalize(this.title) : 'Challenges';
     },
