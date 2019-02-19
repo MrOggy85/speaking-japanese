@@ -3,7 +3,6 @@
     <div class="wrapper">
       <iframe src="https://giphy.com/embed/VwoJkTfZAUBSU" width="332" height="480" frameBorder="0" class="giphy-embed" allowFullScreen></iframe>
       <div class="overview">
-
       </div>
     </div>
   </main-layout>

@@ -3,24 +3,19 @@
   <main-layout
     :title="gameType"
   >
-    <!-- <h2>You are playing: {{ gameType }}</h2> -->
     <game-area
       :question="question"
-      :answer='answers[0]'
-      :hint='hint'
-      :isHintVisible='isHintVisible'
-      :isHintButtonVisible='isHintButtonVisible'
-
-      :userInput='userInput'
-      :actionText='actionText'
-      :recordingText='recordingText'
-
-      :isSpeaking='isSpeaking'
-      :isCorrect='isCorrect'
-
-
-      :onActionButtonClick='onActionButtonClick'
-      :onHintButtonClick='toggleHint'
+      :answer="answers[0]"
+      :hint="hint"
+      :is-hint-visible="isHintVisible"
+      :is-hint-button-visible="isHintButtonVisible"
+      :user-input="userInput"
+      :action-text="actionText"
+      :recording-text="recordingText"
+      :is-speaking="isSpeaking"
+      :is-correct="isCorrect"
+      :on-action-button-click="onActionButtonClick"
+      :on-hint-button-click="toggleHint"
     />
   </main-layout>
 </template>

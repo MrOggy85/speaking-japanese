@@ -41,12 +41,12 @@
         :style="{
           color: isSpeaking ? 'gray' : 'black',
         }"
-        :class='{
+        :class="{
           userInput: true,
           speaking: isSpeaking,
           correct: isCorrect,
           wrong: isCorrect === false,
-        }'
+        }"
       >
         {{ userInput }}
       </div>
@@ -63,30 +63,29 @@
     >
       <speakingSvg
         :style="{
-            width: '80px',
+          width: '80px',
         }"
       />
       <p>
-          {{ isHintVisible ? hint : '&nbsp;' }}
+        {{ isHintVisible ? hint : '&nbsp;' }}
       </p>
       <button
-        @click='onHintButtonClick'
-        :class='{
+        :class="{
           hintButton: true,
           visible: isHintButtonVisible,
-        }'
-
+        }"
+        @click="onHintButtonClick"
       >
         ?
       </button>
     </div>
 
     <button
-      @click='onActionButtonClick'
       class="action-button"
       :style="{
         opacity: actionText ? 1 : 0,
       }"
+      @click="onActionButtonClick"
     >
       {{ actionText }}
     </button>
@@ -167,18 +166,18 @@ export default {
     },
   },
 
+  data() {
+    return {
+      speakingAnimation: null,
+    };
+  },
+
   computed: {
     feebackColor() {
       return this.isCorrect
         ? '#2fc661'
         : '#c62f2f';
     },
-  },
-
-  data() {
-    return {
-      speakingAnimation: null,
-    };
   },
 
   created() {

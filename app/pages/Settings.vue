@@ -5,13 +5,15 @@
     <ul>
       <li>
         <h4>Speech Feedback</h4>
-        <p class="content">After successful guess, play sound of correct pronounciation.</p>
+        <p class="content">
+          After successful guess, play sound of correct pronounciation.
+        </p>
         <input
-          type="checkbox"
           id="checkbox"
           v-model="settings.speech"
-          v-on:change="speechChanged"
-        >
+          type="checkbox"
+          @change="speechChanged"
+        />
         <label
           for="checkbox"
           class="content"

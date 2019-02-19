@@ -3,7 +3,7 @@
     :href="fullHref"
     @click="go"
   >
-    <slot></slot>
+    <slot />
   </a>
 </template>
 
@@ -22,6 +22,7 @@ export default {
     query: {
       type: String,
       required: false,
+      default: '',
     },
   },
   computed: {

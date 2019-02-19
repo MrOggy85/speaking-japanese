@@ -3,42 +3,40 @@
     <ul>
       <li
         v-for="challenge in challenges"
-        v-bind:key="challenge._id"
+        :key="challenge._id"
       >
         <a
           href="# "
-          @click="toggleItem(challenge._id)"
           :class="{
             active: isActive(challenge._id),
             header: true,
           }"
+          @click="toggleItem(challenge._id)"
         >
-          {{capitalized(challenge.name)}}
+          {{ capitalized(challenge.name) }}
         </a>
         <div
           v-if="activeItem === challenge._id"
           class="content"
         >
           <p class="description">
-              {{challenge.description}}
+            {{ challenge.description }}
           </p>
-        <div class="buttons">
-          <v-link
-            href="/study"
-            :query="'game=' + challenge.name"
-          >
-            STUDY
-          </v-link>
-          <v-link
-            href="/play"
-            :query="'game=' + challenge.name"
-          >
-            PLAY
-          </v-link>
+          <div class="buttons">
+            <v-link
+              href="/study"
+              :query="'game=' + challenge.name"
+            >
+              STUDY
+            </v-link>
+            <v-link
+              href="/play"
+              :query="'game=' + challenge.name"
+            >
+              PLAY
+            </v-link>
+          </div>
         </div>
-
-        </div>
-
       </li>
     </ul>
   </main-layout>
