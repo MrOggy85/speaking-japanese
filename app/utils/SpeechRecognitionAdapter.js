@@ -1,19 +1,65 @@
+// @flow
+
+type SpeechRecognitionAlternative = {
+  transcript: string;
+  confidence: number
+}
+type SpeechRecognitionResult = SpeechRecognitionAlternative[] & {
+  isFinal: boolean;
+}
+
+type SpeechRecognitionEvent = {
+  results: Array<SpeechRecognitionResult>;
+}
+
+export const ErrorCode = Object.freeze({
+  NETWORK: 'network',
+  CANCELED: 'canceled',
+  INTERRUPTED: 'interrupted',
+  AUDIO_BUSY: 'audio-busy',
+  AUDIO_HARDWARE: 'audio-hardware',
+  SYNTHESIS_UNAVAILABLE: 'synthesis-unavailable',
+  NO_SPEECH: 'no-speech',
+});
+
+type SpeechSynthesisErrorEvent = {
+  error: $Values<typeof ErrorCode>;
+}
+
+declare class SpeechRecognitionClass {
+  lang: string;
+  interimResults: boolean;
+  maxAlternatives: number;
+
+  onspeechstart: () => void;
+  onspeechend: () => void;
+  onresult: (event: SpeechRecognitionEvent) => void;
+  onerror: (event: SpeechSynthesisErrorEvent) => void;
+
+  start: () => void;
+  stop: () => void;
+}
+
+declare class Window {
+  SpeechRecognition: () => SpeechRecognitionClass;
+  webkitSpeechRecognition: () => SpeechRecognitionClass;
+}
+
+declare var window: Window;
+
 const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
 
 class SpeechRecognitionAdapter {
-  constructor({
-    onKeyPressCallback,
-    onSpeechStartCallback,
-    onSpeechEndCallback,
-    onResultCallback,
-    onErrorCallback,
-  }) {
-    this.onKeyPressCallback = onKeyPressCallback;
-    this.onSpeechStartCallback = onSpeechStartCallback;
-    this.onSpeechEndCallback = onSpeechEndCallback;
-    this.onResultCallback = onResultCallback;
-    this.onErrorCallback = onErrorCallback;
+  recognition: SpeechRecognitionClass;
+  isSpeaking: boolean;
 
+  onKeyPressCallback: ?() => void;
+  onSpeechStartCallback: ?() => void;
+  onSpeechEndCallback: ?() => void;
+  onResultCallback: (transcriptedText: string, isFinal: boolean, isSpeaking: boolean, confidence: number) => void;
+  onErrorCallback: (errorMessage: string, errorCode: $Values<typeof ErrorCode>) => void;
+
+  constructor() {
     this.recognition = new SpeechRecognition();
 
     this.recognition.lang = 'ja_JP';
@@ -45,7 +91,7 @@ class SpeechRecognitionAdapter {
     }
   }
 
-  onResult = (e) => {
+  onResult = (e: SpeechRecognitionEvent) => {
     const last = e.results.length - 1;
     const text = e.results[last][0].transcript;
 
@@ -57,14 +103,21 @@ class SpeechRecognitionAdapter {
     }
   }
 
-  onError = (e) => {
-    if (this.onErrorCallback) {
-      let errorMessage = e.error;
-      if (e.error === 'network') {
-        errorMessage = 'Network conntection problem. Please check your connection and try again.';
-      }
-      this.onErrorCallback(errorMessage);
+  onError = (e: SpeechSynthesisErrorEvent) => {
+    if (!this.onErrorCallback) {
+      return;
     }
+    let errorMessage = '';
+
+    switch (e.error) {
+      case ErrorCode.CANCELED:
+        errorMessage = 'Network conntection problem. Please check your connection and try again.';
+        break;
+      default:
+        errorMessage = `Unknown Error: ${e.error}`;
+    }
+
+    this.onErrorCallback(errorMessage, e.error);
   }
 }
 

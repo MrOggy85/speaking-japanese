@@ -25,11 +25,13 @@
 </style>
 
 <script>
+// @flow
+
 import MainLayout from '../layouts/Main.vue';
 import GameArea from '../components/GameArea.vue';
 
 import GameEngine from '../utils/gameEngine';
-import SpeechRecognitionAdapter from '../utils/SpeechRecognitionAdapter';
+import SpeechRecognitionAdapter, { ErrorCode } from '../utils/SpeechRecognitionAdapter';
 import SpeechSynthesisAdapter from '../utils/SpeechSynthesisAdapter';
 
 import { getSettings } from '../utils/utils';
@@ -53,7 +55,13 @@ function performAction() {
   }
 }
 
-const app = {
+type App = {
+  speechRecognition: SpeechRecognitionAdapter | null;
+}
+
+const app: App = {
+  speechRecognition: null,
+
   components: {
     MainLayout,
     GameArea,
@@ -153,7 +161,7 @@ const app = {
       this.isHintVisible = !this.isHintVisible;
     },
 
-    onKeyPress(e) {
+    onKeyPress(e: KeyboardEvent) {
       const keys = {
         ENTER: 13,
         H: 104,
@@ -175,37 +183,37 @@ const app = {
 
     this.gameEngine = GameEngine;
 
-    this.speechRecognition = new SpeechRecognitionAdapter({
-      onSpeechStartCallback: () => {
-        this.recordingText = 'detecting...';
-        this.isSpeaking = true;
-      },
-      onSpeechEndCallback: () => {
-        this.isSpeaking = false;
-        if (!this.userInput) {
-          this.actionText = 'SPEAK';
-          this.recordingText = 'You didn\'t say anything!';
-        } else {
-          this.recordingText = '';
-        }
-      },
-      onResultCallback: (text, isFinal, isSpeaking) => {
-        this.userInput = text;
-        if (isFinal) {
-          this.checkAnswer();
-        } else if (!isSpeaking) {
-          this.checkAnswer();
-        }
-      },
-      onErrorCallback: (errorText) => {
-        if (errorText === 'no-speech') {
-          this.actionText = 'SPEAK';
-          this.recordingText = 'No speech input detected';
-        } else {
-          this.recordingText = errorText;
-        }
-      },
-    });
+    this.speechRecognition = new SpeechRecognitionAdapter();
+    this.speechRecognition.onSpeechStartCallback = () => {
+      this.recordingText = 'detecting...';
+      this.isSpeaking = true;
+    };
+    this.speechRecognition.onSpeechEndCallback = () => {
+      this.isSpeaking = false;
+      if (!this.userInput) {
+        this.actionText = 'SPEAK';
+        this.recordingText = 'You didn\'t say anything!';
+      } else {
+        this.recordingText = '';
+      }
+    };
+    this.speechRecognition.onResultCallback = (text, isFinal, isSpeaking) => {
+      this.userInput = text;
+      if (isFinal) {
+        this.checkAnswer();
+      } else if (!isSpeaking) {
+        this.checkAnswer();
+      }
+    };
+
+    this.speechRecognition.onErrorCallback = (errorText, errorCode) => {
+      if (errorCode === ErrorCode.NO_SPEECH) {
+        this.actionText = 'SPEAK';
+        this.recordingText = 'No speech input detected';
+      } else {
+        this.recordingText = errorText;
+      }
+    };
 
     this.speechSynthesis = new SpeechSynthesisAdapter();
   },
