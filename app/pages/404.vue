@@ -1,7 +1,7 @@
 <template>
   <main-layout>
     <div class="wrapper">
-      <iframe src="https://giphy.com/embed/VwoJkTfZAUBSU" width="332" height="480" frameBorder="0" class="giphy-embed" allowFullScreen></iframe>
+      <img src="404.png" width="643" height="314" alt="404" />
       <div class="overview">
       </div>
     </div>
@@ -20,7 +20,9 @@ export default {
 <style scoped>
   .wrapper {
     display: flex;
+    position: relative;
     flex-direction: column;
+    justify-content: center;
     height: 75%;
   }
   .overview {
