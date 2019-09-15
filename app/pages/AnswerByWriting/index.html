@@ -1,0 +1,62 @@
+<main-layout
+    title="Number Challenge"
+  >
+  <div class="container">
+    <div class="question-box">
+      <div class="question">
+        {{ isActive
+          ? '???'
+          : 'Please Click Next'
+        }}
+
+      </div>
+      <div class="button-box">
+          <input
+          class="next-button"
+          type="button"
+          @click="next"
+          value="次"
+          :disabled="isActive"
+        />
+        <input
+          class="repeat-button"
+          type="button"
+          @click="repeat"
+          value="もう一度"
+          :disabled="!isActive && !hasAnswered"
+        />
+      </div>
+
+      {{ !isActive
+        ? hasAnswered
+          ? result
+            ? '正解'
+            : `勘違い - ${answer}`
+          : ''
+        : ''
+      }}
+    </div>
+
+    <div class="user-input-box">
+        <div class="user-input">
+          <input
+            type="number"
+            v-model="userInput"
+            @keyup.enter="submit"
+          />
+      </div>
+    </div>
+    <div class="score-box">
+      <div>正解 {{ correct }}</div>
+      <div>勘違い {{ wrong }}</div>
+      <div>点数 {{ resultPercent }}</div>
+    </div>
+  </div>
+  <div>
+    <label>Max Number</label>
+    <input
+      type="number"
+      v-model="maxNumber"
+    />
+  </div>
+</main-layout>

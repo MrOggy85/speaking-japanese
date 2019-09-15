@@ -38,6 +38,13 @@
           </div>
         </div>
       </li>
+      <li>
+        <v-link
+          href="/write"
+        >
+          Number Challenge
+        </v-link>
+      </li>
     </ul>
   </main-layout>
 </template>

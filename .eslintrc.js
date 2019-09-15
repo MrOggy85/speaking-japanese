@@ -43,6 +43,7 @@ module.exports = {
     'no-console': process.env.NODE_ENV === 'production' ? 2 : 1,
     'no-debugger': process.env.NODE_ENV === 'production' ? 2 : 1,
     'lines-between-class-members': 0,
+    'no-plusplus': 0,
 
     'vue/max-attributes-per-line': 0,
     'vue/singleline-html-element-content-newline': 0,
