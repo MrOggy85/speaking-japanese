@@ -3,7 +3,10 @@
   "version": "0.1.0",
   "private": true,
   "description": "Learning Japanese by different speaking challenges",
-  "author": "Oskar Lindgren <lindgren.oskar@gmail.com>",
+  "author": {
+    "name": "Oskar Lindgren",
+    "url": "https://www.oskarlindgren.se"
+  },
   "scripts": {
     "serve": "vue-cli-service serve app/main.js",
     "build": "vue-cli-service build app/main.js",
